@@ -2,7 +2,33 @@
 # More information: https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_exclude_source.htm
 #
 
+# Standard metadata
 package.xml
+
+# These metadata files are ignored when promoting (deploying)
+**/appMenus/**
+**/appSwitcher/**
+**/fieldRestrictionRules/**
+**/objectTranslations/**
+**/profiles/**
+**/profilePasswordPolicy/**
+**/profileSessionSetting/**
+**/settings/**
+**/sharingRules/**
+**/AuthProvider/**
+
+# These metadata files are ignored when pulling (retrieving)
+*.settings
+*.appMenu
+*.appSwitcher
+*.rule
+*.objectTranslation
+*.profile
+*.profilePasswordPolicy
+*.profileSessionSetting
+*.sharingRules
+*.AuthProvider
+sfdcInternalInt__sfdc_scrt2.permissionset-meta.xml
 
 # LWC configuration files
 **/jsconfig.json
@@ -10,3 +36,6 @@ package.xml
 
 # LWC Jest
 **/__tests__/**
+**/tsconfig.json
+
+**/*.ts

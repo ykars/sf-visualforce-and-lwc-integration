@@ -1,0 +1,13 @@
+<LightningMessageChannel xmlns="http://soap.sforce.com/2006/04/metadata">
+    <masterLabel>Message</masterLabel>
+    <isExposed>true</isExposed>
+    <description>Visualforce に埋め込まれた LWC との通信に使用するメッセージチャネル</description>
+    <lightningMessageFields>
+        <fieldName>publisher</fieldName>
+        <description>公開者。VF:Visualforce, LWC:Lightning Web コンポーネント</description>
+    </lightningMessageFields>
+    <lightningMessageFields>
+        <fieldName>message</fieldName>
+        <description>メッセージ</description>
+    </lightningMessageFields>
+</LightningMessageChannel>

@@ -1,0 +1,87 @@
+<apex:page>
+    <!-- Lightning 関連のライブラリをインポート -->
+    <apex:includeLightning />
+
+    <apex:form>
+        <apex:pageBlock title="Visualforce">
+            <!-- LWC にメッセージを送信するボタン -->
+            <apex:pageBlockButtons>
+                <apex:commandButton
+                    value="LWC にメッセージを送信"
+                    onclick="handleSendMessageToLwc();"
+                    oncomplete="return null;"
+                ></apex:commandButton>
+            </apex:pageBlockButtons>
+
+            <apex:pageBlockSection columns="2">
+                <!-- LWC からのメッセージ表示領域 -->
+                <apex:pageBlockSectionItem>
+                    <h2>LWC からのメッセージ</h2>
+                    <div class="lwc-message-list"></div>
+                </apex:pageBlockSectionItem>
+
+                <!-- LWC 埋め込み領域 -->
+                <apex:pageBlockSectionItem>
+                    <div id="lwc-container"></div>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+
+    <script>
+        // メッセージチャネルを購読する
+        const MESSAGE_CHANNEL = "{!$MessageChannel.Message__c}";
+        let subscription = sforce.one.subscribe(MESSAGE_CHANNEL, handleInboundMessage, { scope: 'APPLICATION' });
+
+        // Lightning Out を使用して LWC をページに埋め込む
+        $Lightning.use('c:lmsChildContainer', function() {
+            $Lightning.createComponent(
+                'c:lmsChild',
+                {
+                    messageChannel: MESSAGE_CHANNEL,
+                    publish: sforce.one.publish,
+                    subscribe: sforce.one.subscribe
+                },
+                'lwc-container',
+                function(cmp) {
+                    console.log('Visualforce ページに LWC が追加されました:' + cmp);
+                    publishMessage('Hello!');
+                }
+            );
+        });
+
+        /**
+         * メッセージチャネル受信時ハンドラ
+         * @param {MessageChannel} message メッセージチャネルレコード
+         */
+        function handleInboundMessage(message) {
+            if (message.publisher === 'LWC') {
+                const lwcMessage = message.message;
+
+                const lwcMessageElement = document.createElement('p');
+                lwcMessageElement.textContent = lwcMessage;
+
+                const lwcMessageListElement = document.querySelector('.lwc-message-list');
+                lwcMessageListElement.appendChild(lwcMessageElement);
+            }
+        }
+
+        /**
+         * LWC にメッセージを送信する
+         */
+        function handleSendMessageToLwc() {
+            publishMessage('Hello from Visualforce!');
+        }
+
+        /**
+         * メッセージチャネルを公開する
+         */
+        function publishMessage(message) {
+            const payload = {
+                publisher: 'VF',
+                message: message
+            };
+            sforce.one.publish(MESSAGE_CHANNEL, payload);
+        }
+    </script>
+</apex:page>

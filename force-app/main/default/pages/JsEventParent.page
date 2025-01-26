@@ -1,0 +1,73 @@
+<apex:page>
+    <!-- Lightning 関連のライブラリをインポート -->
+    <apex:includeLightning />
+
+    <apex:form>
+        <apex:pageBlock title="Visualforce">
+            <!-- LWC にメッセージを送信するボタン -->
+            <apex:pageBlockButtons>
+                <apex:commandButton
+                    value="LWC にメッセージを送信"
+                    onclick="handleSendMessageToLwc();"
+                    oncomplete="return null;"
+                ></apex:commandButton>
+            </apex:pageBlockButtons>
+
+            <apex:pageBlockSection columns="2">
+                <!-- LWC からのメッセージ表示領域 -->
+                <apex:pageBlockSectionItem>
+                    <h2>LWC からのメッセージ</h2>
+                    <div class="lwc-message-list"></div>
+                </apex:pageBlockSectionItem>
+
+                <!-- LWC 埋め込み領域 -->
+                <apex:pageBlockSectionItem>
+                    <div id="lwc-container"></div>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+
+    <script>
+        // Lightning Out を使用して LWC をページに埋め込む
+        $Lightning.use('c:jsEventChildContainer', function() {
+            $Lightning.createComponent(
+                'c:jsEventChild',
+                {
+                    vfMessages: [{ key: 0, value: 'Hello!', timestamp: new Date().toLocaleTimeString() }]
+                },
+                'lwc-container',
+                function(cmp) {
+                    console.log('Visualforce ページに LWC が追加されました:' + cmp);
+
+                    // LWC にイベントリスナーを設定
+                    const lwc = document.querySelector('c-js-event-child');
+                    lwc.addEventListener('message', handleLwcMessage);
+                }
+            );
+        });
+
+        /**
+         * LWC からのメッセージ受信時ハンドラ
+         * @param {Event} event イベント
+         */
+        function handleLwcMessage(event) {
+            const lwcMessage = event.detail.message;
+
+            const lwcMessageElement = document.createElement('p');
+            lwcMessageElement.textContent = lwcMessage;
+
+            const lwcMessageListElement = document.querySelector('.lwc-message-list');
+            lwcMessageListElement.appendChild(lwcMessageElement);
+        }
+
+        /**
+         * LWC にメッセージを送信する
+         */
+        function handleSendMessageToLwc() {
+            // LWC の @api 関数を呼び出す
+            const lwc = document.querySelector('c-js-event-child');
+            lwc.addVfMessage('Hello from Visualforce!');
+        }
+    </script>
+</apex:page>
