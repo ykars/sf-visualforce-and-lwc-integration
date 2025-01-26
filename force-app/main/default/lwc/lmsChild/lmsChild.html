@@ -1,0 +1,37 @@
+<template>
+    <lightning-card title="LWC">
+        <!-- Visualforce からのメッセージ表示領域 -->
+        <div class="vf-message-list slds-scrollable">
+            <div class="slds-chat-bookend">
+                <span class="slds-icon_container slds-icon-utility-chat slds-chat-icon">
+                    <lightning-icon icon-name="utility:chat" size="small"></lightning-icon>
+                </span>
+                <p>Visualforce からのメッセージ</p>
+            </div>
+            <section role="log" class="slds-chat">
+                <ul class="slds-chat-list">
+                    <template for:each={vfMessages} for:item="vfMessage">
+                        <li key={vfMessage.key} class="slds-chat-listitem slds-chat-listitem_inbound">
+                            <div class="slds-chat-message">
+                                <div class="slds-chat-message__body">
+                                    <div class="slds-chat-message__text slds-chat-message__text_inbound">
+                                        <span>{vfMessage.value}</span>
+                                    </div>
+                                    <div class="slds-chat-message__meta" aria-label="Visualforce">Visualforce • {vfMessage.timestamp}</div>
+                                </div>
+                            </div>
+                        </li>
+                    </template>
+                </ul>
+            </section>
+        </div>
+
+        <div slot="footer">
+            <!-- Visualforce にメッセージを送信するボタン -->
+            <lightning-button
+                label="Visualforce にメッセージを送信"
+                onclick={handleSendMessageToVf}
+            ></lightning-button>
+        </div>
+    </lightning-card>
+</template>
