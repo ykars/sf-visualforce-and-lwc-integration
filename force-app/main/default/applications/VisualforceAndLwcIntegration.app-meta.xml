@@ -12,7 +12,8 @@
     <isOmniPinnedViewEnabled>false</isOmniPinnedViewEnabled>
     <label>Visualforce と LWC の統合</label>
     <navType>Standard</navType>
-    <tabs>JsEvent</tabs>
+    <tabs>ParentChildCommunicationUsingJsEvent</tabs>
+    <tabs>ParentChildCommunicationUsingLms</tabs>
     <uiType>Lightning</uiType>
     <utilityBar>Visualforce_LWC_UtilityBar</utilityBar>
 </CustomApplication>
